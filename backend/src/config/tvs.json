@@ -1,0 +1,11 @@
+{
+    "tvs": [
+        {
+            "id": "tv1",
+            "name": "TV Samsung hofer",
+            "ip": "10.10.90.251",
+            "port": 8001,
+            "token": "votre_token_ici"
+        }
+    ]
+} 

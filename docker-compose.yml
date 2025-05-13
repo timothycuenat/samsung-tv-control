@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - ./backend/config:/app/config
+    networks:
+      - samsung-tv-network
+
+networks:
+  samsung-tv-network:
+    driver: bridge 

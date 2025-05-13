@@ -1,0 +1,10 @@
+flask[async]==3.0.2
+flask-cors==4.0.0
+python-dotenv==1.0.1
+python-jose[cryptography]==3.3.0
+passlib[bcrypt]==1.7.4
+python-multipart==0.0.9
+websockets==12.0
+aiohttp==3.9.3
+async-timeout==5.0.1
+icmplib==3.0.3 
