@@ -344,7 +344,7 @@ class SamsungTVArt(SamsungTVWSConnection):
 
         return thumbnail_data_dict if as_dict else list(thumbnail_data_dict.values()) if len(content_id_list) > 1 else thumbnail_data
 
-    def upload(self, file, matte="shadowbox_polar", portrait_matte="shadowbox_polar", file_type="png", date=None):
+    def upload(self, file, matte="", portrait_matte="", file_type="png", date=None):
         if isinstance(file, str):
             file_name, file_extension = os.path.splitext(file)
             file_type = file_extension[1:]

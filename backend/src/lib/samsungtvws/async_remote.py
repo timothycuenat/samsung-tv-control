@@ -27,7 +27,7 @@ class SamsungTVWSAsyncRemote(async_connection.SamsungTVWSAsyncConnection):
         port: int = 8001,
         timeout: Optional[float] = None,
         key_press_delay: float = 1,
-        name: str = "SamsungTvRemote",
+        name: str = "Samsung TV WS Remote",
     ) -> None:
         super().__init__(
             host,

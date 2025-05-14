@@ -1,0 +1,563 @@
+2025-05-14 13:00:44 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:01:34 | ERROR    | main | Exception on request GET /api/v1/tvs
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 152, in get_all_tvs
+    tvs = tv_service.config_service.get_tvs()
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'ConfigService' object has no attribute 'get_tvs'
+2025-05-14 13:01:54 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:01:54 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:01:57 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:01:59 | INFO     | ConfigService | Récupération de la configuration de toutes les TVs
+2025-05-14 13:01:59 | INFO     | ConfigService | Création du fichier de configuration /Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/config/tv_config.json
+2025-05-14 13:01:59 | INFO     | ConfigService | Fichier de configuration créé avec succès
+2025-05-14 13:01:59 | INFO     | ConfigService | Configuration récupérée avec succès (0 TVs configurées)
+2025-05-14 13:02:02 | INFO     | ConfigService | Récupération de la configuration de toutes les TVs
+2025-05-14 13:02:02 | INFO     | ConfigService | Configuration récupérée avec succès (0 TVs configurées)
+2025-05-14 13:02:52 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:02:52 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:02:54 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:02:56 | INFO     | ConfigService | Récupération de la configuration de toutes les TVs
+2025-05-14 13:02:56 | INFO     | ConfigService | Configuration récupérée avec succès (1 TVs configurées)
+2025-05-14 13:02:57 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:02:57 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:02:57 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:02:57 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:02:57 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:02:57 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:03:00 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:03:01 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:03:01 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:03:01 | ERROR    | main | Exception on request GET /api/v1/tv/10.10.90.251
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 15, in get_tv_info
+    status = await tv_service.get_tv_status(ip_address)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/services/tv_service.py", line 84, in get_tv_status
+    self.config_service.update_tv_status(ip_address, result["data"])
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/services/config_service.py", line 135, in update_tv_status
+    for tv in self.tvs["tvs"]:
+              ^^^^^^^^
+AttributeError: 'ConfigService' object has no attribute 'tvs'
+2025-05-14 13:03:14 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:03:14 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:03:14 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:03:14 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:03:14 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:03:24 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x105025d30>
+2025-05-14 13:03:24 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:03:29 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:03:29 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:03:29 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:03:29 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:03:29 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:03:29 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:03:32 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:03:33 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:03:33 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:03:33 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:03:33 | ERROR    | main | Exception on request GET /api/v1/tv/10.10.90.251
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 18, in get_tv_info
+    slideshow_status = await tv_service.get_custom_slideshow_status(ip_address)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'get_custom_slideshow_status'
+2025-05-14 13:03:36 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:03:36 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:03:36 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:03:36 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:03:36 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:03:46 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x102aaa510>
+2025-05-14 13:03:46 | ERROR    | asyncio | Unclosed connector
+connections: ['[(<aiohttp.client_proto.ResponseHandler object at 0x1040026f0>, 305605.601901333)]']
+connector: <aiohttp.connector.TCPConnector object at 0x102aab770>
+2025-05-14 13:03:55 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:03:59 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:03:59 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:03:59 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:03:59 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:03:59 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:03:59 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:04:03 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:04:05 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:04:05 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:04:05 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:04:05 | ERROR    | main | Exception on request GET /api/v1/tv/10.10.90.251
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 18, in get_tv_info
+    slideshow_status = await tv_service.get_custom_slideshow_status(ip_address)
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'get_custom_slideshow_status'
+2025-05-14 13:04:28 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:04:28 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:04:28 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:04:28 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:04:28 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:04:38 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x106cd2510>
+2025-05-14 13:04:40 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:04:42 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:04:42 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:04:42 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:04:42 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:04:42 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:04:42 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:04:45 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:04:46 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:04:46 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:04:46 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:04:52 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:04:52 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:04:53 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:04:53 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:04:53 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:05:01 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:05:01 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:05:02 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:05:02 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:05:02 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:03 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:03 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:05 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:05 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:05 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:07 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:07 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:09 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:09 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:09 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:14 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:14 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:15 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:15 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:15 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:29 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:29 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:31 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:31 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:31 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:31 | ERROR    | main | Exception on request PUT /api/v1/tv/10.10.90.251/power
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 37, in power_control
+    await tv_service.stop_custom_slideshow(ip_address)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'stop_custom_slideshow'. Did you mean: 'custom_slideshow'?
+2025-05-14 13:07:36 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:36 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:37 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:37 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:37 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:37 | ERROR    | main | Exception on request PUT /api/v1/tv/10.10.90.251/power
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 37, in power_control
+    await tv_service.stop_custom_slideshow(ip_address)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'stop_custom_slideshow'. Did you mean: 'custom_slideshow'?
+2025-05-14 13:07:40 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:40 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:41 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:41 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:41 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:41 | ERROR    | main | Exception on request PUT /api/v1/tv/10.10.90.251/power
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 37, in power_control
+    await tv_service.stop_custom_slideshow(ip_address)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'stop_custom_slideshow'. Did you mean: 'custom_slideshow'?
+2025-05-14 13:07:43 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:43 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:44 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:44 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:44 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:46 | ERROR    | main | Exception on request PUT /api/v1/tv/10.10.90.251/power
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 37, in power_control
+    await tv_service.stop_custom_slideshow(ip_address)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'stop_custom_slideshow'. Did you mean: 'custom_slideshow'?
+2025-05-14 13:07:50 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:07:50 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:07:52 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:07:52 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:07:52 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:07:53 | ERROR    | main | Exception on request PUT /api/v1/tv/10.10.90.251/power
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 37, in power_control
+    await tv_service.stop_custom_slideshow(ip_address)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'stop_custom_slideshow'. Did you mean: 'custom_slideshow'?
+2025-05-14 13:08:11 | ERROR    | main | Exception on request PUT /api/v1/tv/10.10.90.251/power
+Traceback (most recent call last):
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1464, in handle_request
+    return await self.full_dispatch_request(request_context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1502, in full_dispatch_request
+    result = await self.handle_user_exception(error)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1059, in handle_user_exception
+    raise error
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1500, in full_dispatch_request
+    result = await self.dispatch_request(request_context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart/app.py", line 1597, in dispatch_request
+    return await self.ensure_async(handler)(**request_.view_args)  # type: ignore[return-value]
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/venv/lib/python3.13/site-packages/quart_cors/__init__.py", line 108, in wrapper
+    await make_response(await current_app.ensure_async(func)(*args, **kwargs)),
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/Users/timothycuenat/DEV/samsung-tv-ws-api/samsung-tv-control/backend/src/api/tv_routes.py", line 37, in power_control
+    await tv_service.stop_custom_slideshow(ip_address)
+          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AttributeError: 'TVService' object has no attribute 'stop_custom_slideshow'. Did you mean: 'custom_slideshow'?
+2025-05-14 13:08:47 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:08:47 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:08:47 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:08:47 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:08:47 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:08:57 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x110e3e660>
+2025-05-14 13:09:02 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:09:05 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:05 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:09:05 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:09:05 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:05 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:09:05 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:09:08 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:09 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:09 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:09 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:12 | INFO     | TVService | Contrôle de l'alimentation de la TV 10.10.90.251 (action=off)
+2025-05-14 13:09:12 | INFO     | TVControl | Contrôle de l'alimentation de la TV 10.10.90.251 (action=off)
+2025-05-14 13:09:12 | INFO     | TVControl | Mode OFF : la TV 10.10.90.251 est allumée, on l'éteint
+2025-05-14 13:09:12 | WARNING  | lib.samsungtvws.async_connection | Using send_command to send multiple commands is deprecated, please use send_commands.
+2025-05-14 13:09:17 | INFO     | TVControl | Nouvel état de la TV 10.10.90.251: éteinte
+2025-05-14 13:09:17 | INFO     | TVService | Contrôle de l'alimentation réussi pour la TV 10.10.90.251
+2025-05-14 13:09:20 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:20 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:21 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:21 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:21 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:21 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:21 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:22 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:22 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:22 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:27 | INFO     | TVService | Contrôle de l'alimentation de la TV 10.10.90.251 (action=on)
+2025-05-14 13:09:27 | INFO     | TVControl | Contrôle de l'alimentation de la TV 10.10.90.251 (action=on)
+2025-05-14 13:09:27 | INFO     | TVControl | Mode ON : la TV 10.10.90.251 est éteinte, on l'allume
+2025-05-14 13:09:27 | WARNING  | lib.samsungtvws.async_connection | Using send_command to send multiple commands is deprecated, please use send_commands.
+2025-05-14 13:09:32 | INFO     | TVControl | Nouvel état de la TV 10.10.90.251: allumée
+2025-05-14 13:09:32 | INFO     | TVService | Contrôle de l'alimentation réussi pour la TV 10.10.90.251
+2025-05-14 13:09:35 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:35 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:37 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:37 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:37 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:37 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:37 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:38 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:38 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:38 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:41 | INFO     | TVService | Contrôle du mode Art pour la TV 10.10.90.251 (action=off)
+2025-05-14 13:09:41 | INFO     | TVControl | Contrôle du mode Art pour la TV 10.10.90.251 (action=off)
+2025-05-14 13:09:42 | INFO     | TVControl | Mode Art OFF : la TV 10.10.90.251 est en mode Art, on le désactive
+2025-05-14 13:09:45 | INFO     | TVControl | Nouvel état du mode Art pour la TV 10.10.90.251: désactivé
+2025-05-14 13:09:45 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:45 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:46 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:46 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:46 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:46 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:46 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:47 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:47 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:47 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:49 | INFO     | TVService | Contrôle du mode Art pour la TV 10.10.90.251 (action=on)
+2025-05-14 13:09:49 | INFO     | TVControl | Contrôle du mode Art pour la TV 10.10.90.251 (action=on)
+2025-05-14 13:09:50 | INFO     | TVControl | Mode Art ON : la TV 10.10.90.251 n'est pas en mode Art, on l'active
+2025-05-14 13:09:52 | INFO     | TVControl | Nouvel état du mode Art pour la TV 10.10.90.251: activé
+2025-05-14 13:09:52 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:52 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:53 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:53 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:53 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:09:53 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:09:53 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:09:55 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:09:55 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:09:55 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:10:01 | INFO     | TVService | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:10:01 | INFO     | TVService | Exécution du diaporama pour la TV 10.10.90.251
+2025-05-14 13:10:01 | ERROR    | TVService | Erreur inattendue lors de l'exécution du diaporama pour la TV 10.10.90.251: 'TVControl' object has no attribute 'custom_slideshow'
+2025-05-14 13:10:01 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:10:01 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:10:02 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:10:02 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:10:02 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:10:18 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:10:18 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:10:20 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:10:20 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:10:20 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:10:32 | INFO     | TVService | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:10:32 | INFO     | TVService | Exécution du diaporama pour la TV 10.10.90.251
+2025-05-14 13:10:32 | ERROR    | TVService | Erreur inattendue lors de l'exécution du diaporama pour la TV 10.10.90.251: 'TVControl' object has no attribute 'custom_slideshow'
+2025-05-14 13:10:32 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:10:32 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:10:33 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:10:33 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:10:33 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:10:49 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:10:49 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:10:49 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:10:49 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:10:49 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:10:59 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x10413e660>
+2025-05-14 13:11:04 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:11:06 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:11:06 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:11:06 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:11:06 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:11:06 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:11:06 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:11:14 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:11:15 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:11:15 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:11:15 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:11:19 | INFO     | TVService | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:11:19 | INFO     | TVService | Exécution du diaporama pour la TV 10.10.90.251
+2025-05-14 13:11:19 | INFO     | TVControl | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:11:19 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:11:19 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:11:20 | INFO     | TVControl | Configuration de la rotation automatique pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:11:20 | ERROR    | TVControl | Erreur lors de la configuration de la rotation pour la TV 10.10.90.251: 'SamsungTVAsyncArt' object has no attribute 'set_auto_rotation'
+2025-05-14 13:11:20 | ERROR    | TVControl | Erreur lors de la configuration du diaporama pour la TV 10.10.90.251: 'SamsungTVAsyncArt' object has no attribute 'set_auto_rotation'
+2025-05-14 13:11:20 | ERROR    | TVService | Erreur lors de l'exécution du diaporama pour la TV 10.10.90.251: 'SamsungTVAsyncArt' object has no attribute 'set_auto_rotation'
+2025-05-14 13:11:20 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:11:20 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:11:20 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:12:08 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:12:08 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:12:08 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:12:08 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:12:08 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:12:18 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x10583e660>
+2025-05-14 13:12:21 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:12:25 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:12:25 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:12:25 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:12:25 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:12:25 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:12:25 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:12:28 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:12:29 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:12:29 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:12:29 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:12:34 | INFO     | TVService | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:12:34 | INFO     | TVService | Exécution du diaporama pour la TV 10.10.90.251
+2025-05-14 13:12:34 | INFO     | TVControl | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:12:34 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:12:34 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:12:35 | INFO     | TVControl | Configuration de la rotation automatique pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:12:35 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:12:35 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:12:35 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:12:38 | ERROR    | TVControl | Erreur lors de la configuration de la rotation pour la TV 10.10.90.251: 
+2025-05-14 13:12:38 | ERROR    | TVControl | Erreur lors de la configuration du diaporama pour la TV 10.10.90.251: 
+2025-05-14 13:12:38 | ERROR    | TVService | Erreur lors de l'exécution du diaporama pour la TV 10.10.90.251: 
+2025-05-14 13:13:23 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:13:23 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:13:23 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:13:23 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:13:23 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:13:33 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x1059aa660>
+2025-05-14 13:13:45 | INFO     | hypercorn.error | Running on http://0.0.0.0:8080 (CTRL + C to quit)
+2025-05-14 13:13:47 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:13:47 | INFO     | TVService | Création d'une nouvelle instance de contrôle pour la TV 10.10.90.251
+2025-05-14 13:13:47 | INFO     | TVControl | Initialisation du contrôleur TV pour 10.10.90.251
+2025-05-14 13:13:47 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:13:47 | INFO     | TVControl | Connexion nécessaire pour la TV 10.10.90.251
+2025-05-14 13:13:47 | INFO     | TVControl | Tentative de connexion à la TV 10.10.90.251:8002
+2025-05-14 13:13:50 | INFO     | TVControl | Connexion établie avec succès pour la TV 10.10.90.251
+2025-05-14 13:13:52 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:13:52 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:13:52 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:13:59 | INFO     | TVService | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:13:59 | INFO     | TVService | Exécution du diaporama pour la TV 10.10.90.251
+2025-05-14 13:13:59 | INFO     | TVControl | Démarrage du diaporama personnalisé pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:13:59 | INFO     | TVService | Récupération de l'état de la TV 10.10.90.251
+2025-05-14 13:13:59 | INFO     | TVControl | Récupération du statut de la TV 10.10.90.251
+2025-05-14 13:14:00 | INFO     | TVControl | Configuration de la rotation automatique pour la TV 10.10.90.251 (duration=10, shuffle=True, category=2)
+2025-05-14 13:14:00 | INFO     | TVControl | Statut récupéré avec succès pour la TV 10.10.90.251
+2025-05-14 13:14:00 | INFO     | TVService | État de la TV 10.10.90.251 récupéré avec succès
+2025-05-14 13:14:00 | INFO     | ConfigService | Statut de la TV 10.10.90.251 mis à jour avec succès
+2025-05-14 13:14:01 | ERROR    | TVControl | Erreur lors de la configuration de la rotation pour la TV 10.10.90.251: set_slideshow_status request failed with error number -7
+2025-05-14 13:14:01 | ERROR    | TVControl | Erreur lors de la configuration du diaporama pour la TV 10.10.90.251: set_slideshow_status request failed with error number -7
+2025-05-14 13:14:01 | ERROR    | TVService | Erreur lors de l'exécution du diaporama pour la TV 10.10.90.251: set_slideshow_status request failed with error number -7
+2025-05-14 13:14:53 | INFO     | main | Arrêt du service (after_serving)...
+2025-05-14 13:14:53 | INFO     | TVService | Fermeture de toutes les connexions aux TVs
+2025-05-14 13:14:53 | INFO     | TVService | Connexion fermée pour la TV 10.10.90.251
+2025-05-14 13:14:53 | INFO     | TVControl | Fermeture de la connexion à la TV 10.10.90.251
+2025-05-14 13:14:53 | INFO     | TVControl | Connexion fermée avec succès pour la TV 10.10.90.251
+2025-05-14 13:15:03 | ERROR    | asyncio | Unclosed client session
+client_session: <aiohttp.client.ClientSession object at 0x11813e660>

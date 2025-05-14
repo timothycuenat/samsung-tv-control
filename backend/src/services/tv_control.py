@@ -9,6 +9,7 @@ from lib.samsungtvws.rest import SamsungTVRest
 from lib.samsungtvws.remote import SendRemoteKey
 from lib.samsungtvws.async_art import SamsungTVAsyncArt
 import time
+import random
 
 # Configuration des logs
 logging.basicConfig(
@@ -18,6 +19,8 @@ logging.basicConfig(
 logger = logging.getLogger('TVControl')
 
 class TVControl:
+    _slideshow_task = None  # Singleton pour la tâche de diaporama
+
     def __init__(self, ip_address: str, port: int = 8002, token_file: Optional[str] = None):
         self.ip_address = ip_address
         self.port = port
@@ -27,6 +30,8 @@ class TVControl:
         if token_file is None:
             token_file = Path(__file__).parent.parent / 'config' / f'token_{ip_address.replace(".", "_")}.txt'
         self.token_file = str(token_file)
+        self._stop_slideshow = False  # Flag pour arrêter le diaporama
+        self.slideshow_task = None  # Tâche de diaporama
 
     def _check_network_connectivity(self) -> tuple[bool, str]:
         """
@@ -73,7 +78,8 @@ class TVControl:
             self.tv = SamsungTVWSAsyncRemote(
                 host=self.ip_address,
                 port=self.port,
-                token_file=self.token_file
+                token_file=self.token_file,
+                name="Samsung TV Controller"
             )
             await self.tv.start_listening()
             
@@ -398,21 +404,49 @@ class TVControl:
         duration = time.time() - start
         logger.info(f"[PERF] TVControl.close({self.ip_address}) - done in {duration:.3f}s")
 
-    async def upload_photo(self, file_bytes, file_type="png", matte="shadowbox_polar", portrait_matte="shadowbox_polar"):
+    async def upload_photo(self, file_bytes, file_type="png", matte="", portrait_matte="flexible_black"):
         await self.ensure_connected()
         if not self.tv_art:
             return {"success": False, "error": "Impossible de se connecter au canal Art"}
         try:
-            content_id = await self.tv_art.upload(
+            # On fait l'upload de manière asynchrone
+            upload_task = asyncio.create_task(self.tv_art.upload(
                 file=file_bytes,
                 matte=matte,
                 portrait_matte=portrait_matte,
                 file_type=file_type
-            )
-            if content_id:
-                return {"success": True, "content_id": content_id}
-            else:
-                return {"success": False, "error": "Upload échoué"}
+            ))
+            
+            # On vérifie que l'image a bien été uploadée avec un polling
+            max_attempts = 5
+            attempt = 0
+            while attempt < max_attempts:
+                # On vérifie d'abord si l'upload est terminé
+                if upload_task.done():
+                    try:
+                        await upload_task  # On attend la fin de l'upload si ce n'est pas déjà fait
+                    except Exception as e:
+                        return {"success": False, "error": f"Erreur lors de l'upload: {str(e)}"}
+                
+                images_result = await self.list_art_images()
+                if not images_result.get("success"):
+                    return {"success": False, "error": "Impossible de vérifier l'upload"}
+                    
+                images = images_result.get("images", [])
+                if images:
+                    # On trie les images par date pour avoir la plus récente
+                    latest_image = max(images, key=lambda x: x.get('image_date', ''))
+                    return {
+                        "success": True,
+                        "content_id": latest_image.get('content_id'),
+                        "image_details": latest_image
+                    }
+                
+                attempt += 1
+                if attempt < max_attempts:
+                    await asyncio.sleep(0.5)  # Attente courte entre les tentatives
+            
+            return {"success": False, "error": "L'image n'a pas été trouvée après l'upload"}
         except Exception as e:
             return {"success": False, "error": str(e)}
 
@@ -440,17 +474,273 @@ class TVControl:
             return {"success": False, "error": str(e)}
 
     async def delete_art_images(self, content_ids):
-        import logging
-        logger = logging.getLogger("TVControl.delete_art_images")
-        await self.ensure_connected()
-        if not self.tv_art:
-            logger.error("Impossible de se connecter au canal Art")
-            return {"success": False, "error": "Impossible de se connecter au canal Art"}
         try:
-            logger.info(f"Suppression des images : {content_ids}")
-            await self.tv_art.delete_list(content_ids)
-            logger.info("Suppression effectuée.")
-            return {"success": True}
+            if not content_ids:
+                return {"success": False, "error": "Aucun ID d'image spécifié"}
+            
+            if isinstance(content_ids, str):
+                content_ids = [content_ids]
+            
+            result = await self.tv_art.delete_list(content_ids)
+            return {"success": True, "data": result}
         except Exception as e:
-            logger.error(f"Erreur lors de la suppression des images Art Mode : {e}")
-            return {"success": False, "error": str(e)} 
+            return {"success": False, "error": str(e)}
+
+    async def set_auto_rotation(self, duration: int, shuffle: bool, category: int) -> dict:
+        """
+        Configure la rotation automatique des images.
+        
+        Args:
+            duration: Durée en minutes (0 pour désactiver)
+            shuffle: True pour aléatoire, False pour séquentiel
+            category: 2=mes images, 4=favoris, 8=store
+        """
+        try:
+            result = await self.tv_art.set_auto_rotation_status(duration, shuffle, category)
+            return {"success": True, "data": result}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    async def set_slideshow(self, duration: int, shuffle: bool, category: int) -> dict:
+        """
+        Configure le diaporama des images.
+        
+        Args:
+            duration: Durée en minutes (0 pour désactiver)
+            shuffle: True pour aléatoire, False pour séquentiel
+            category: 2=mes images, 4=favoris, 8=store
+        """
+        try:
+            await self.ensure_connected()
+            if not self.tv_art:
+                return {"success": False, "error": "Impossible de se connecter au canal Art"}
+            
+            # Vérifier si le mode Art est supporté
+            if not await self.tv_art.supported():
+                return {"success": False, "error": "Le mode Art n'est pas supporté par cette TV"}
+            
+            # Vérifier si le mode Art est activé
+            art_mode = await self.tv_art.get_artmode()
+            if art_mode != "on":
+                return {"success": False, "error": "Le mode Art n'est pas activé. Activez d'abord le mode Art."}
+            
+            # Vérifier si la catégorie existe
+            available_categories = await self.tv_art.available(category=f"MY-C000{category}")
+            if not available_categories:
+                return {"success": False, "error": f"Aucune image trouvée dans la catégorie {category}"}
+            
+            # S'assurer que la durée est valide
+            if duration < 0:
+                return {"success": False, "error": "La durée doit être un nombre positif"}
+            
+            # Vérifier le statut actuel
+            current_status = await self.tv_art.get_auto_rotation_status()
+            logger.info(f"Statut actuel de la rotation : {current_status}")
+            
+            # Utiliser set_auto_rotation_status avec l'événement de confirmation
+            data = await self.tv_art._send_art_request(
+                {
+                    "request": "set_auto_rotation_status",
+                    "value": str(duration) if duration > 0 else "off",
+                    "category_id": f"MY-C000{category}",
+                    "type": "shuffleslideshow" if shuffle else "slideshow"
+                },
+                wait_for_event="auto_rotation_changed"
+            )
+            
+            if not data:
+                return {"success": False, "error": "La TV n'a pas confirmé le changement"}
+            
+            logger.info(f"Résultat de la configuration : {data}")
+            
+            # Vérifier le nouveau statut
+            new_status = await self.tv_art.get_auto_rotation_status()
+            logger.info(f"Nouveau statut de la rotation : {new_status}")
+            
+            return {"success": True, "data": new_status}
+        except Exception as e:
+            logger.error(f"Erreur lors de la configuration du diaporama : {str(e)}")
+            return {"success": False, "error": str(e)}
+
+    async def get_auto_rotation_status(self) -> dict:
+        """
+        Récupère le statut de la rotation automatique.
+        """
+        try:
+            result = await self.tv_art.get_auto_rotation_status()
+            return {"success": True, "data": result}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    async def get_slideshow_status(self) -> dict:
+        """
+        Récupère le statut du diaporama.
+        """
+        try:
+            await self.ensure_connected()
+            if not self.tv_art:
+                return {"success": False, "error": "Impossible de se connecter au canal Art"}
+            
+            # Vérifier si le mode Art est supporté
+            if not await self.tv_art.supported():
+                return {"success": False, "error": "Le mode Art n'est pas supporté par cette TV"}
+            
+            # Vérifier si le mode Art est activé
+            art_mode = await self.tv_art.get_artmode()
+            if art_mode != "on":
+                return {"success": False, "error": "Le mode Art n'est pas activé"}
+            
+            result = await self.tv_art.get_slideshow_status()
+            return {"success": True, "data": result}
+        except Exception as e:
+            return {"success": False, "error": str(e)}
+
+    async def _check_art_mode_support(self) -> bool:
+        """
+        Vérifie si le mode art est supporté par la TV.
+        """
+        try:
+            await self.ensure_connected()
+            if not self.tv_art:
+                return False
+            
+            return await self.tv_art.supported()
+        except Exception as e:
+            logger.error(f"Erreur lors de la vérification du support du mode art: {str(e)}")
+            return False
+
+    async def custom_slideshow(self, duration: int, shuffle: bool, category: int) -> dict:
+        """
+        Démarre un diaporama personnalisé avec les images de la catégorie spécifiée.
+        
+        Args:
+            duration: Durée en secondes entre chaque image
+            shuffle: True pour mélanger les images, False pour l'ordre séquentiel
+            category: 2=mes images, 4=favoris, 8=store
+        """
+        try:
+            await self.ensure_connected()
+            if not self.tv_art:
+                return {"success": False, "error": "Impossible de se connecter au canal Art"}
+
+            # Vérifier si le mode art est supporté
+            if not await self.tv_art.supported():
+                return {"success": False, "error": "Le mode art n'est pas supporté sur cette TV"}
+
+            # Vérifier si le mode art est activé
+            status = await self.get_status()
+            if not status.get("success", False):
+                return {"success": False, "error": "Impossible de vérifier l'état du mode art"}
+            
+            if not status.get("data", {}).get("art_mode", False):
+                # Activer le mode art si nécessaire
+                logger.info("Mode art non activé, tentative d'activation...")
+                result = await self.art_mode_control("on")
+                if not result.get("success", False):
+                    return {"success": False, "error": "Impossible d'activer le mode art"}
+                
+                # Attendre que le mode art soit activé
+                for _ in range(10):  # 10 tentatives de 2 secondes
+                    await asyncio.sleep(2)
+                    status = await self.get_status()
+                    if status.get("success", False) and status.get("data", {}).get("art_mode", False):
+                        logger.info("Mode art activé avec succès")
+                        break
+                else:
+                    return {"success": False, "error": "Le mode art n'a pas pu être activé"}
+
+            # Récupérer la liste des images
+            logger.info("Récupération des images...")
+            images_result = await self.list_art_images()
+            if not images_result.get("success", False):
+                return {"success": False, "error": "Impossible de récupérer la liste des images"}
+            
+            images = images_result.get("images", [])
+            if not images:
+                return {"success": False, "error": "Aucune image trouvée dans la catégorie spécifiée"}
+            
+            logger.info(f"Nombre d'images trouvées : {len(images)}")
+            
+            # Mélanger les images si demandé
+            if shuffle:
+                logger.info("Images mélangées")
+                random.shuffle(images)
+            
+            # Annuler la tâche existante si elle existe
+            if self.slideshow_task and not self.slideshow_task.done():
+                self.slideshow_task.cancel()
+                try:
+                    await self.slideshow_task
+                except asyncio.CancelledError:
+                    pass
+            
+            # Créer et démarrer la nouvelle tâche
+            self.slideshow_task = asyncio.create_task(self._run_slideshow_loop(images, duration))
+            logger.info("Tâche de diaporama créée et démarrée")
+            
+            return {"success": True, "message": "Diaporama démarré"}
+            
+        except Exception as e:
+            logger.error(f"Erreur lors du démarrage du diaporama: {str(e)}")
+            return {"success": False, "error": str(e)}
+
+    async def _run_slideshow_loop(self, images: list, duration: int):
+        """
+        Exécute le diaporama en boucle continue.
+        """
+        try:
+            logger.info("Démarrage de la tâche de diaporama...")
+            self._stop_slideshow = False  # Réinitialiser le flag au démarrage
+            while not self._stop_slideshow:  # Vérifier le flag d'arrêt
+                for i, image in enumerate(images, 1):
+                    if self._stop_slideshow:  # Vérifier le flag d'arrêt
+                        logger.info("Diaporama arrêté explicitement")
+                        return
+
+                    # Vérifier si le mode art est toujours actif
+                    status = await self.get_status()
+                    if not status.get("success", False) or not status.get("data", {}).get("art_mode", False):
+                        logger.info("Mode art désactivé, arrêt du diaporama")
+                        return
+                    
+                    # Afficher l'image
+                    logger.info(f"Affichage de l'image {i}/{len(images)} (ID: {image['content_id']})")
+                    try:
+                        await self.tv_art.select_image(image['content_id'])
+                        logger.info(f"Image {image['content_id']} affichée avec succès")
+                    except Exception as e:
+                        logger.error(f"Erreur lors de l'affichage de l'image {image['content_id']}: {str(e)}")
+                        continue
+                    
+                    # Attendre la durée spécifiée
+                    logger.info(f"Attente de {duration} secondes avant la prochaine image...")
+                    await asyncio.sleep(duration)
+                
+                logger.info("Fin du cycle, redémarrage du diaporama...")
+                
+        except asyncio.CancelledError:
+            logger.info("Tâche de diaporama annulée")
+            raise
+        except Exception as e:
+            logger.error(f"Erreur inattendue dans la tâche de diaporama: {str(e)}")
+            raise
+        finally:
+            self._stop_slideshow = False  # Réinitialiser le flag à la fin
+
+    async def stop_slideshow_task(self):
+        """
+        Arrête le diaporama en cours.
+        """
+        logger.info(f"Arrêt du diaporama pour la TV {self.ip_address}")
+        self._stop_slideshow = True  # Activer le flag d'arrêt
+        
+        # Annuler la tâche si elle existe
+        if self.slideshow_task and not self.slideshow_task.done():
+            self.slideshow_task.cancel()
+            try:
+                await self.slideshow_task
+            except asyncio.CancelledError:
+                pass
+            finally:
+                self.slideshow_task = None  # Réinitialiser la référence à la tâche
+                self._stop_slideshow = False  # Réinitialiser le flag d'arrêt 

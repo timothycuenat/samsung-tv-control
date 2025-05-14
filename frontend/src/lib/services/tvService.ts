@@ -79,6 +79,53 @@ export class TVService {
       this.handleError(error);
     }
   }
+
+  async deleteAllArtImages(ip: string): Promise<any> {
+    try {
+      const res = await axios.delete(`${BASE_URL}/v1/tv/${ip}/art-images`, {
+        data: {
+          content_ids: [
+            "MY_F0020",
+            "MY_F0021",
+          ]
+        }
+      });
+      return res.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async uploadFolderImages(ip: string): Promise<any> {
+    try {
+      const res = await axios.post(`${BASE_URL}/v1/tv/${ip}/upload-folder`);
+      return res.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async startCustomSlideshow(ip: string, duration: number, shuffle: boolean, category: number = 2): Promise<any> {
+    try {
+      const res = await axios.put(`${BASE_URL}/v1/tv/${ip}/art-images/custom-slideshow`, {
+        duration,
+        shuffle,
+        category
+      });
+      return res.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
+
+  async stopCustomSlideshow(ip: string): Promise<any> {
+    try {
+      const res = await axios.put(`${BASE_URL}/v1/tv/${ip}/art-images/custom-slideshow/stop`);
+      return res.data;
+    } catch (error) {
+      this.handleError(error);
+    }
+  }
 }
 
 export const tvService = new TVService(); 

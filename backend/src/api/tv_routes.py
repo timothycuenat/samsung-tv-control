@@ -11,14 +11,16 @@ tv_service = TVService()
 
 @tv_bp.route('/api/v1/tv/<ip_address>', methods=['GET'])
 @route_cors(allow_origin="*")
-async def get_tv_status(ip_address):
-    start = time.time()
-    result = await tv_service.get_tv_status(ip_address)
-    duration = time.time() - start
-    print(f"[PERF] get_tv_status({ip_address}) : {duration:.3f}s")
-    if "error" in result:
-        return jsonify(result), 500
-    return jsonify(result)
+async def get_tv_info(ip_address):
+    status = await tv_service.get_tv_status(ip_address)
+    
+    # Récupérer l'état actuel du diaporama personnalisé
+    slideshow_status = await tv_service.get_custom_slideshow_status(ip_address)
+    
+    return jsonify({
+        "status": status,
+        "slideshow_status": slideshow_status
+    })
 
 @tv_bp.route('/api/v1/tv/<ip_address>/power', methods=['PUT'])
 @route_cors(allow_origin="*")
@@ -30,6 +32,9 @@ async def power_control(ip_address):
             "success": False,
             "error": f"Action '{action}' non supportée. Utilisez 'toggle', 'on' ou 'off'"
         }), 400
+    
+    # Arrêter le diaporama avant de changer l'état de l'alimentation
+    await tv_service.stop_custom_slideshow(ip_address)
     
     result = await tv_service.power_control(ip_address, action)
     duration = time.time() - start
@@ -47,6 +52,9 @@ async def set_art_mode(ip_address):
             "error": f"Action '{action}' non supportée. Utilisez 'toggle', 'on' ou 'off'"
         }), 400
     
+    # Arrêter le diaporama avant de changer le mode art
+    await tv_service.stop_custom_slideshow(ip_address)
+    
     result = await tv_service.set_art_mode(ip_address, action)
     duration = time.time() - start
     print(f"[PERF] set_art_mode({ip_address}, action={action}) : {duration:.3f}s")
@@ -61,8 +69,12 @@ async def upload_photo(ip_address):
     file = files['file']
     file_bytes = file.read()
     file_type = file.filename.split('.')[-1]
-    matte = request.args.get('matte', 'shadowbox_polar')
-    portrait_matte = request.args.get('portrait_matte', 'shadowbox_polar')
+    matte = request.args.get('matte', '')
+    portrait_matte = request.args.get('portrait_matte', '')
+    
+    # Arrêter le diaporama avant de télécharger une nouvelle image
+    await tv_service.stop_custom_slideshow(ip_address)
+    
     result = await tv_service.upload_photo(ip_address, file_bytes, file_type, matte, portrait_matte)
     if not result.get("success"):
         return jsonify(result), 500
@@ -82,6 +94,10 @@ async def upload_folder(ip_address):
         return jsonify({"success": False, "error": f"Dossier introuvable : {folder_path}"}), 400
     logger = logging.getLogger("upload-folder")
     results = []
+    
+    # Arrêter le diaporama avant de télécharger un dossier d'images
+    await tv_service.stop_custom_slideshow(ip_address)
+    
     for filename in os.listdir(folder_path):
         if filename.lower().endswith(extensions):
             with open(os.path.join(folder_path, filename), 'rb') as f:
@@ -121,6 +137,10 @@ async def delete_art_images(ip_address):
         if not images_result.get('success'):
             return jsonify(images_result), 500
         content_ids = [img['content_id'] for img in images_result['images']]
+    
+    # Arrêter le diaporama avant de supprimer des images
+    await tv_service.stop_custom_slideshow(ip_address)
+    
     result = await tv_service.delete_art_images(ip_address, content_ids)
     if not result.get('success'):
         return jsonify(result), 500
@@ -130,4 +150,42 @@ async def delete_art_images(ip_address):
 @route_cors(allow_origin="*")
 async def get_all_tvs():
     tvs = tv_service.config_service.get_tvs()
-    return jsonify(tvs) 
+    return jsonify(tvs)
+
+@tv_bp.route('/api/v1/tv/<ip_address>/art-images/custom-slideshow', methods=['PUT'])
+@route_cors(allow_origin="*")
+async def custom_slideshow(ip_address):
+    start = time.time()
+    data = await request.get_json(force=True)
+    
+    # Paramètres avec valeurs par défaut
+    duration_seconds = data.get('duration', 5)  # en secondes
+    shuffle = data.get('shuffle', True)  # True pour aléatoire, False pour séquentiel
+    category = data.get('category', 2)  # 2=mes images, 4=favoris, 8=store
+    
+    if not isinstance(duration_seconds, (int, float)) or duration_seconds < 0:
+        return jsonify({
+            "success": False,
+            "error": "La durée doit être un nombre positif (en secondes)"
+        }), 400
+    
+    if category not in [2, 4, 8]:
+        return jsonify({
+            "success": False,
+            "error": "Catégorie invalide. Utilisez 2 (mes images), 4 (favoris) ou 8 (store)"
+        }), 400
+    
+    result = await tv_service.custom_slideshow(ip_address, duration_seconds, shuffle, category)
+    execution_time = time.time() - start
+    print(f"[PERF] custom_slideshow({ip_address}, duration={duration_seconds}, shuffle={shuffle}, category={category}) : {execution_time:.3f}s")
+    return jsonify(result)
+
+@tv_bp.route('/api/v1/tv/<ip_address>/art-images/custom-slideshow/stop', methods=['PUT'])
+@route_cors(allow_origin="*")
+async def stop_custom_slideshow(ip_address):
+    # Arrêter le diaporama en mettant à jour l'état
+    tv_service.slideshow_state_service.set_state(ip_address, False, 0, False, 0)
+    # Arrêter la tâche de diaporama
+    tv_control = tv_service.get_tv_control(ip_address)
+    await tv_control.stop_slideshow_task()
+    return jsonify({"success": True, "message": "Diaporama arrêté"}) 
