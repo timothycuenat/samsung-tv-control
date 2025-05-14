@@ -1,6 +1,7 @@
 import json
 import logging
 import asyncio
+import socket
 from typing import Optional, Dict, Any
 from pathlib import Path
 from lib.samsungtvws.async_remote import SamsungTVWSAsyncRemote
@@ -27,11 +28,46 @@ class TVControl:
             token_file = Path(__file__).parent.parent / 'config' / f'token_{ip_address.replace(".", "_")}.txt'
         self.token_file = str(token_file)
 
-    async def connect(self) -> bool:
+    def _check_network_connectivity(self) -> tuple[bool, str]:
+        """
+        Vérifie la connectivité réseau avec la TV.
+        Retourne un tuple (succès, message_erreur)
+        """
+        try:
+            sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            sock.settimeout(2)
+            result = sock.connect_ex((self.ip_address, self.port))
+            sock.close()
+            
+            if result == 0:
+                return True, "Connexion réseau établie"
+            
+            if result == 113:  # No route to host
+                return False, f"La TV n'est pas accessible sur le réseau actuel. Vérifiez que vous êtes sur le même sous-réseau que la TV ({self.ip_address})"
+            
+            if result == 111:  # Connection refused
+                return False, f"La TV refuse la connexion sur {self.ip_address}:{self.port}. Vérifiez que la TV est allumée et que le service est actif."
+            
+            if result == 110:  # Connection timed out
+                return False, f"La connexion à la TV a expiré ({self.ip_address}:{self.port}). Vérifiez que la TV est allumée et accessible."
+            
+            return False, f"Impossible d'atteindre la TV sur {self.ip_address}:{self.port} (code erreur: {result})"
+        except Exception as e:
+            return False, f"Erreur lors de la connexion à la TV: {str(e)}"
+
+    async def connect(self) -> tuple[bool, str]:
         start = time.time()
         logger.info(f"[PERF] TVControl.connect({self.ip_address}) - start")
         try:
             logger.info(f"Tentative de connexion à la TV {self.ip_address}:{self.port}")
+            
+            # Vérification de la connectivité réseau
+            success, error_msg = self._check_network_connectivity()
+            if not success:
+                logger.error(error_msg)
+                duration = time.time() - start
+                logger.info(f"[PERF] TVControl.connect({self.ip_address}) - done in {duration:.3f}s (FAILED)")
+                return False, error_msg
             
             # Créer l'instance pour les commandes
             self.tv = SamsungTVWSAsyncRemote(
@@ -54,26 +90,22 @@ class TVControl:
                 port=self.port
             )
             await self.tv_art.start_listening()
-            # Test explicite du canal Art
-            logger.info("Test explicite du canal Art : appel à get_artmode() avec timeout court...")
-            try:
-                import asyncio
-                artmode_status = await asyncio.wait_for(self.tv_art.get_artmode(), timeout=1)
-                logger.info(f"Réponse explicite get_artmode() : {artmode_status}")
-            except Exception as e:
-                logger.warning(f"Erreur explicite get_artmode() : {e}")
-            logger.info("Fin du test explicite du canal Art.")
             
             # On attend un peu pour s'assurer que la connexion est bien établie
             logger.info("Connexion établie avec succès")
             duration = time.time() - start
             logger.info(f"[PERF] TVControl.connect({self.ip_address}) - done in {duration:.3f}s")
-            return True
+            return True, ""
         except Exception as e:
-            logger.error(f"Erreur lors de la connexion: {e}")
+            error_msg = str(e)
+            if "No route to host" in error_msg or "Network is unreachable" in error_msg:
+                error_msg = f"La TV n'est pas accessible sur le réseau actuel. Vérifiez que vous êtes sur le même sous-réseau que la TV ({self.ip_address})"
+            elif "ms.channel.timeOut" in error_msg:
+                error_msg = f"La TV Samsung a rejeté la connexion. Les TV Samsung exigent d'être sur exactement le même sous-réseau (même si un ping fonctionne). Vérifiez que votre appareil est sur le même sous-réseau que la TV ({self.ip_address})"
+            logger.error(f"Erreur lors de la connexion: {error_msg}")
             duration = time.time() - start
             logger.info(f"[PERF] TVControl.connect({self.ip_address}) - done in {duration:.3f}s (FAILED)")
-            return False
+            return False, error_msg
 
     async def disconnect(self):
         if self.tv:
@@ -89,18 +121,23 @@ class TVControl:
             except Exception as e:
                 logger.error(f"Erreur lors de la déconnexion du mode art: {e}")
 
-    async def ensure_connected(self):
+    async def ensure_connected(self) -> tuple[bool, str]:
         if not self.tv or not self.tv_rest or not self.tv_art:
-            await self.connect()
+            return await self.connect()
+        return True, ""
 
     async def get_status(self) -> Dict[str, Any]:
         start = time.time()
         logger.info(f"[PERF] TVControl.get_status({self.ip_address}) - start")
-        await self.ensure_connected()
-        if not self.tv or not self.tv_rest or not self.tv_art:
+        success, error_msg = await self.ensure_connected()
+        if not success:
             duration = time.time() - start
             logger.info(f"[PERF] TVControl.get_status({self.ip_address}) - done in {duration:.3f}s (FAILED)")
-            return {"success": False, "error": "Impossible de se connecter à la TV"}
+            return {
+                "success": False, 
+                "error": error_msg,
+                "error_type": "network_error" if "sous-réseau" in error_msg.lower() or "accessible" in error_msg.lower() else "connection_error"
+            }
 
         try:
             # Récupération des informations détaillées de la TV
@@ -130,10 +167,19 @@ class TVControl:
                 }
             }
         except Exception as e:
-            logger.error(f"Erreur lors de la récupération de l'état: {e}")
+            error_msg = str(e)
+            if "No route to host" in error_msg or "Network is unreachable" in error_msg:
+                error_msg = f"La TV n'est pas accessible sur le réseau actuel. Vérifiez que vous êtes sur le même sous-réseau que la TV ({self.ip_address})"
+            elif "ms.channel.timeOut" in error_msg:
+                error_msg = f"La TV Samsung a rejeté la connexion. Les TV Samsung exigent d'être sur exactement le même sous-réseau (même si un ping fonctionne). Vérifiez que votre appareil est sur le même sous-réseau que la TV ({self.ip_address})"
+            logger.error(f"Erreur lors de la récupération de l'état: {error_msg}")
             duration = time.time() - start
             logger.info(f"[PERF] TVControl.get_status({self.ip_address}) - done in {duration:.3f}s (FAILED)")
-            return {"success": False, "error": str(e)}
+            return {
+                "success": False, 
+                "error": error_msg,
+                "error_type": "network_error" if "sous-réseau" in error_msg.lower() or "accessible" in error_msg.lower() else "connection_error"
+            }
 
     async def send_command(self, key: str) -> Dict[str, Any]:
         await self.ensure_connected()

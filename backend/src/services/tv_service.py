@@ -6,6 +6,7 @@ from pathlib import Path
 from .tv_control import TVControl
 import asyncio
 import time
+from .config_service import ConfigService
 
 logging.basicConfig(
     level=logging.INFO,
@@ -16,6 +17,7 @@ logger = logging.getLogger('TVService')
 class TVService:
     def __init__(self):
         self.config_path = Path(__file__).parent.parent / 'config' / 'tvs.json'
+        self.config_service = ConfigService()
         self.tokens_dir = Path(__file__).parent.parent / 'config' / 'tokens'
         self.tokens_dir.mkdir(exist_ok=True)
         self.load_config()
@@ -55,14 +57,20 @@ class TVService:
         
         if result.get("success", False):
             logger.info(f"État de la TV {ip_address} récupéré avec succès")
+            # Mise à jour de la config via ConfigService
+            self.config_service.update_tv_status(ip_address, result["data"])
             duration = time.time() - start
             logger.info(f"[PERF] get_tv_status({ip_address}) - done in {duration:.3f}s")
             return result["data"]
         
-        logger.error(f"Échec de la récupération de l'état de la TV {ip_address}: {result.get('error')}")
+        error_msg = result.get('error', 'Erreur inconnue')
+        logger.error(f"Échec de la récupération de l'état de la TV {ip_address}: {error_msg}")
         duration = time.time() - start
         logger.info(f"[PERF] get_tv_status({ip_address}) - done in {duration:.3f}s")
-        return {"error": result.get("error")}
+        return {
+            "error": error_msg,
+            "error_type": "network_error" if "sous-réseau" in error_msg.lower() or "accessible" in error_msg.lower() else "unknown_error"
+        }
 
     async def power_control(self, ip_address, action: str):
         start = time.time()
@@ -81,10 +89,14 @@ class TVService:
             logger.info(f"[PERF] power_control({ip_address}, {action}) - done in {duration:.3f}s")
             return {"success": True, "data": status}
             
-        logger.error(f"Échec du contrôle de l'alimentation pour la TV {ip_address}: {result.get('error')}")
+        error_msg = result.get('error', 'Erreur inconnue')
+        logger.error(f"Échec du contrôle de l'alimentation pour la TV {ip_address}: {error_msg}")
         duration = time.time() - start
         logger.info(f"[PERF] power_control({ip_address}, {action}) - done in {duration:.3f}s")
-        return {"error": result["error"]}
+        return {
+            "error": error_msg,
+            "error_type": "network_error" if "sous-réseau" in error_msg.lower() or "accessible" in error_msg.lower() else "unknown_error"
+        }
 
     async def set_art_mode(self, ip_address, action: str):
         start = time.time()

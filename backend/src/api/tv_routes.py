@@ -3,11 +3,14 @@ from services.tv_service import TVService
 import time
 import os
 import logging
+from quart_cors import cors, route_cors
+
 
 tv_bp = Blueprint('tv', __name__)
 tv_service = TVService()
 
 @tv_bp.route('/api/v1/tv/<ip_address>', methods=['GET'])
+@route_cors(allow_origin="*")
 async def get_tv_status(ip_address):
     start = time.time()
     result = await tv_service.get_tv_status(ip_address)
@@ -18,6 +21,7 @@ async def get_tv_status(ip_address):
     return jsonify(result)
 
 @tv_bp.route('/api/v1/tv/<ip_address>/power', methods=['PUT'])
+@route_cors(allow_origin="*")
 async def power_control(ip_address):
     start = time.time()
     action = request.args.get('action', 'toggle')
@@ -33,6 +37,7 @@ async def power_control(ip_address):
     return jsonify(result)
 
 @tv_bp.route('/api/v1/tv/<ip_address>/art-mode', methods=['PUT'])
+@route_cors(allow_origin="*")
 async def set_art_mode(ip_address):
     start = time.time()
     action = request.args.get('action', 'toggle')
@@ -48,6 +53,7 @@ async def set_art_mode(ip_address):
     return jsonify(result)
 
 @tv_bp.route('/api/v1/tv/<ip_address>/upload', methods=['POST'])
+@route_cors(allow_origin="*")
 async def upload_photo(ip_address):
     files = await request.files
     if 'file' not in files:
@@ -63,6 +69,7 @@ async def upload_photo(ip_address):
     return jsonify(result)
 
 @tv_bp.route('/api/v1/tv/<ip_address>/upload-folder', methods=['POST'])
+@route_cors(allow_origin="*")
 async def upload_folder(ip_address):
     folder_path = os.environ.get('TV_IMAGE_FOLDER')
     extensions_env = os.environ.get('TV_IMAGE_EXTENSIONS')
@@ -92,6 +99,7 @@ async def upload_folder(ip_address):
     return jsonify(results)
 
 @tv_bp.route('/api/v1/tv/<ip_address>/art-images', methods=['GET'])
+@route_cors(allow_origin="*")
 async def list_art_images(ip_address):
     start = time.time()
     result = await tv_service.list_art_images(ip_address)
@@ -102,6 +110,7 @@ async def list_art_images(ip_address):
     return jsonify(result)
 
 @tv_bp.route('/api/v1/tv/<ip_address>/art-images', methods=['DELETE'])
+@route_cors(allow_origin="*")
 async def delete_art_images(ip_address):
     data = await request.get_json(force=True)
     content_ids = data.get('content_ids') if data else None
@@ -115,4 +124,10 @@ async def delete_art_images(ip_address):
     result = await tv_service.delete_art_images(ip_address, content_ids)
     if not result.get('success'):
         return jsonify(result), 500
-    return jsonify(result) 
+    return jsonify(result)
+
+@tv_bp.route('/api/v1/tvs', methods=['GET'])
+@route_cors(allow_origin="*")
+async def get_all_tvs():
+    tvs = tv_service.config_service.get_tvs()
+    return jsonify(tvs) 

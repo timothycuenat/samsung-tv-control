@@ -7,6 +7,7 @@ import signal
 import sys
 import dotenv
 import os
+from quart_cors import cors
 
 dotenv.load_dotenv()
 
@@ -18,6 +19,10 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 app = Quart(__name__)
+app = cors(
+    app,
+    allow_origin=r"^http?://10\\.10\\..*"
+)
 
 # Enregistrement du blueprint
 app.register_blueprint(tv_bp)

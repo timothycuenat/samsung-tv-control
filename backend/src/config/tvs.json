@@ -1,11 +1,9 @@
 {
     "tvs": [
         {
-            "id": "tv1",
-            "name": "TV Samsung hofer",
+            "name": "SAMSUNG HOFER-GROUPE",
             "ip": "10.10.90.251",
-            "port": 8001,
-            "token": "votre_token_ici"
+            "modelName": "QE65LS03DAUXXH"
         }
     ]
-} 
+}
